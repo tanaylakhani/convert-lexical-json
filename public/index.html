@@ -587,11 +587,26 @@
         
         const json = JSON.parse(jsonInput.value);
         
+        const response = await fetch('/api/convert-to-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ json })
+        });
+
+        // Get the image as a blob
+        const blob = await response.blob();
+        
+        // Create an object URL from the blob
+        const objectUrl = URL.createObjectURL(blob);
+        
+        // Set the image source to the object URL
+        imageOutput.src = objectUrl;
+        
         // If you have an image conversion API endpoint
         imageOutput.style.display = 'block';
         imagePlaceholder.style.display = 'none';
         
-        imageOutput.src = `/api/convert-to-image?json=${encodeURIComponent(JSON.stringify(json))}`;
+        // imageOutput.src = data.body;
         imageOutput.onerror = () => {
           imageOutput.style.display = 'none';
           imagePlaceholder.style.display = 'block';

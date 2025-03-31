@@ -2,7 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es6",
-    "lib": ["esnext"],
+    "lib": ["esnext", "es2020", "dom", "dom.iterable"],
     "module": "commonjs",
     "rootDir": ".",
     "sourceMap": true,
