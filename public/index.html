@@ -4,18 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lexical JSON Converter Demo</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
   <style>
     :root {
-      --primary-color: #4361ee;
-      --secondary-color: #3f37c9;
-      --bg-color: #f8f9fa;
+      --primary: #5469d4;
+      --primary-hover: #4456b7;
+      --text: #1a1f36;
+      --text-secondary: #697386;
+      --background: #f7fafc;
       --card-bg: #ffffff;
-      --text-color: #333;
-      --border-color: #e0e0e0;
-      --border-radius: 12px;
-      --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      --border: #e6e8eb;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --radius: 8px;
+      --transition: all 0.2s ease;
+      --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+        Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 
     * {
@@ -25,212 +27,202 @@
     }
 
     body {
-      font-family: var(--font-family);
-      background-color: var(--bg-color);
-      color: var(--text-color);
+      font-family: var(--font);
+      background-color: var(--background);
+      color: var(--text);
       line-height: 1.6;
-      padding: 0;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      padding: 2rem 1rem;
     }
 
     .container {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 2rem;
-      width: 100%;
     }
 
-    header {
+    .header {
+      margin-bottom: 2.5rem;
       text-align: center;
-      margin-bottom: 2rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border-color);
     }
 
-    h1 {
+    .header h1 {
       font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-      color: var(--primary-color);
-      font-weight: 800;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--text);
     }
 
-    h2 {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
-      font-weight: 600;
-    }
-
-    p.subtitle {
+    .header p {
       font-size: 1.1rem;
-      color: #666;
-      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
     }
 
-    .content {
+    .row {
       display: flex;
-      gap: 1.5rem;
+      gap: 2rem;
       margin-bottom: 2rem;
     }
 
     @media (max-width: 768px) {
-      .content {
+      .row {
         flex-direction: column;
       }
     }
 
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--border-radius);
+    .col {
+      flex: 1;
+      background-color: var(--card-bg);
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow: hidden;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+      padding: 2rem;
     }
 
-    .card-header {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid var(--border-color);
+    h2 {
+      font-size: 1.5rem;
       font-weight: 600;
-      font-size: 1.1rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      margin-bottom: 1.25rem;
+      color: var(--text);
     }
 
-    .card-body {
-      padding: 1.5rem;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+    h3 {
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin: 1.5rem 0 1rem;
+      color: var(--text);
     }
 
     textarea {
       width: 100%;
-      height: 300px;
+      height: 320px;
       padding: 1rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      font-family: 'Monaco', 'Consolas', monospace;
-      font-size: 14px;
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 2px);
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.95rem;
+      line-height: 1.5;
       resize: vertical;
+      transition: var(--transition);
       background-color: #fafafa;
-      transition: border-color 0.2s;
     }
 
     textarea:focus {
       outline: none;
-      border-color: var(--primary-color);
-      box-shadow: 0 0 0 2px rgba(67, 97, 238, 0.2);
-    }
-
-    .actions {
-      margin-top: 1rem;
-      display: flex;
-      gap: 0.5rem;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(84, 105, 212, 0.15);
     }
 
     button {
-      background-color: var(--primary-color);
+      background-color: var(--primary);
       color: white;
       border: none;
-      padding: 0.6rem 1.2rem;
-      border-radius: 6px;
+      padding: 0.75rem 1.25rem;
+      border-radius: calc(var(--radius) - 2px);
       cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 500;
-      display: flex;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: var(--transition);
+      display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      transition: background-color 0.2s, transform 0.1s;
+      justify-content: center;
     }
 
     button:hover {
-      background-color: var(--secondary-color);
+      background-color: var(--primary-hover);
+      transform: translateY(-1px);
     }
 
-    button:active {
-      transform: translateY(1px);
+    .button-group {
+      margin: 1.25rem 0;
+      display: flex;
+      gap: 0.75rem;
     }
 
-    button.secondary {
-      background-color: #e9ecef;
-      color: #495057;
+    .output {
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 2px);
+      padding: 1.25rem;
+      min-height: 250px;
+      white-space: pre-wrap;
+      overflow: auto;
+      background-color: #fafafa;
+      font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+      font-size: 0.9rem;
+      line-height: 1.5;
     }
 
-    button.secondary:hover {
-      background-color: #dee2e6;
+    .html-preview {
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 2px);
+      padding: 1.25rem;
+      min-height: 250px;
+      overflow: auto;
+      background-color: white;
+    }
+
+    .thumbnail-container {
+      margin-top: 1.5rem;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 250px;
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 2px);
+      background-color: white;
+      padding: 1rem;
+    }
+
+    .thumbnail {
+      max-width: 100%;
+      box-shadow: var(--shadow);
+      border-radius: calc(var(--radius) - 4px);
     }
 
     .tabs {
       display: flex;
-      border-bottom: 1px solid var(--border-color);
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
     }
 
     .tab {
       padding: 0.75rem 1.25rem;
       cursor: pointer;
+      margin-right: 0.5rem;
       border-bottom: 2px solid transparent;
-      transition: all 0.2s;
       font-weight: 500;
+      color: var(--text-secondary);
+      transition: var(--transition);
+    }
+
+    .tab:hover {
+      color: var(--primary);
     }
 
     .tab.active {
-      border-bottom-color: var(--primary-color);
-      color: var(--primary-color);
+      border-bottom: 2px solid var(--primary);
+      color: var(--primary);
+      font-weight: 600;
     }
 
     .tab-content {
       display: none;
-      flex-direction: column;
-      flex: 1;
     }
 
     .tab-content.active {
-      display: flex;
-    }
-
-    .output {
-      flex: 1;
-      padding: 1rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      overflow: auto;
-      background-color: #fafafa;
-      min-height: 200px;
-      font-family: 'Monaco', 'Consolas', monospace;
-      font-size: 14px;
-      white-space: pre-wrap;
-    }
-
-    .preview {
-      margin-top: 1.5rem;
-    }
-
-    .preview-content {
-      padding: 1.5rem;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background-color: white;
-      min-height: 200px;
+      display: block;
     }
 
     footer {
       text-align: center;
-      padding: 1.5rem;
-      margin-top: auto;
-      font-size: 0.9rem;
-      color: #666;
-      border-top: 1px solid var(--border-color);
+      margin-top: 3rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
     }
 
     footer a {
-      color: var(--primary-color);
+      color: var(--primary);
       text-decoration: none;
+      font-weight: 500;
     }
 
     footer a:hover {
@@ -240,255 +232,272 @@
     .heart {
       color: #e25555;
       display: inline-block;
-      animation: heartbeat 1.5s infinite;
+      margin: 0 0.15rem;
+      animation: beat 1s infinite alternate;
+      transform-origin: center;
     }
 
-    @keyframes heartbeat {
-      0% { transform: scale(1); }
-      5% { transform: scale(1.2); }
-      10% { transform: scale(1); }
-      15% { transform: scale(1.2); }
-      20% { transform: scale(1); }
-      100% { transform: scale(1); }
+    @keyframes beat {
+      to {
+        transform: scale(1.2);
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <header>
+    <div class="header">
       <h1>Lexical JSON Converter</h1>
-      <p class="subtitle">Convert Lexical JSON to HTML, plain text, and images</p>
-    </header>
+      <p>Transform Lexical JSON to HTML, plain text, and images with a modern UI</p>
+    </div>
 
-    <div class="content">
-      <!-- Input Card -->
-      <div class="card">
-        <div class="card-header">
-          Lexical JSON Input
-        </div>
-        <div class="card-body">
-          <textarea id="json-input" placeholder="Paste your Lexical JSON here..."></textarea>
-          <div class="actions">
-            <button id="sample-btn" class="secondary">
-              <i class="fas fa-file-code"></i> Load Example
-            </button>
-          </div>
+    <div class="row">
+      <div class="col">
+        <h2>Lexical JSON Input</h2>
+        <textarea id="json-input" placeholder="Paste your Lexical JSON here..."></textarea>
+        <div class="button-group">
+          <button id="use-example">Use Example JSON</button>
         </div>
       </div>
-
-      <!-- Output Card -->
-      <div class="card">
-        <div class="card-header">
-          Output
-          <div class="tabs">
-            <div class="tab active" data-tab="html">HTML</div>
-            <div class="tab" data-tab="text">Text</div>
-            <div class="tab" data-tab="image">Image</div>
-          </div>
+      <div class="col">
+        <div class="tabs">
+          <div class="tab active" data-tab="html">HTML</div>
+          <div class="tab" data-tab="text">Plain Text</div>
+          <div class="tab" data-tab="image">Image</div>
         </div>
-        <div class="card-body">
-          <!-- HTML Tab -->
-          <div class="tab-content active" id="html-tab">
-            <button id="convert-html-btn">
-              <i class="fas fa-code"></i> Convert to HTML
-            </button>
-            <div id="html-output" class="output">HTML output will appear here</div>
-            
-            <div class="preview">
-              <h2>HTML Preview</h2>
-              <div id="html-preview" class="preview-content"></div>
-            </div>
-          </div>
-          
-          <!-- Text Tab -->
-          <div class="tab-content" id="text-tab">
-            <button id="convert-text-btn">
-              <i class="fas fa-align-left"></i> Convert to Plain Text
-            </button>
-            <div id="text-output" class="output">Plain text output will appear here</div>
-          </div>
-          
-          <!-- Image Tab -->
-          <div class="tab-content" id="image-tab">
-            <button id="convert-image-btn">
-              <i class="fas fa-image"></i> Generate Image
-            </button>
-            <div class="output">
-              <img id="image-output" style="max-width: 100%; display: none;" alt="Generated image will appear here">
-              <div id="image-placeholder">Image will be generated here</div>
-            </div>
+        
+        <div class="tab-content active" id="html-tab">
+          <button id="convert-html">Convert to HTML</button>
+          <pre class="output" id="html-output"></pre>
+          <h3>Preview</h3>
+          <div class="html-preview" id="html-preview"></div>
+        </div>
+        
+        <div class="tab-content" id="text-tab">
+          <button id="convert-text">Convert to Plain Text</button>
+          <pre class="output" id="text-output"></pre>
+        </div>
+        
+        <div class="tab-content" id="image-tab">
+          <button id="convert-image">Generate Image</button>
+          <div class="thumbnail-container">
+            <img id="image-output" class="thumbnail" alt="Document preview will appear here">
           </div>
         </div>
       </div>
     </div>
+    <footer>
+      Built with <span class="heart">♥</span> by <a href="https://x.com/tanaylakhani" target="_blank">Tanay</a> from <a href="https://betterstacks.com" target="_blank">Stacks</a>
+    </footer>
   </div>
 
-  <footer>
-    Built with <span class="heart">♥</span> by <a href="https://x.com/tanaylakhani" target="_blank">Tanay</a> from <a href="https://betterstacks.com" target="_blank">Stacks</a>
-  </footer>
-
   <script>
-    // Sample Lexical JSON
-    const sampleJson = {
+    // Example Lexical JSON
+    const exampleJson = {
       root: {
         children: [
           {
-            type: 'heading',
-            tag: 'h1',
             children: [
               {
-                type: 'text',
-                text: 'Sample Lexical Document',
-                format: 0
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "Lexical JSON Example Document",
+                type: "text",
+                version: 1
               }
             ],
-            direction: 'ltr',
-            format: '',
+            direction: "ltr",
+            format: "",
             indent: 0,
+            type: "heading",
+            version: 1,
+            tag: "h1"
+          },
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "This is a sample document created with Lexical Editor. Below are some examples of formatting:",
+                type: "text",
+                version: 1
+              }
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "paragraph",
             version: 1
           },
           {
-            type: 'paragraph',
             children: [
               {
-                type: 'text',
-                text: 'This is a sample document showing various formatting options in Lexical. Here we have ',
-                format: 0
-              },
-              {
-                type: 'text',
-                text: 'bold',
-                format: 1
-              },
-              {
-                type: 'text',
-                text: ', ',
-                format: 0
-              },
-              {
-                type: 'text',
-                text: 'italic',
-                format: 2
-              },
-              {
-                type: 'text',
-                text: ', and ',
-                format: 0
-              },
-              {
-                type: 'text',
-                text: 'underlined',
-                format: 4
-              },
-              {
-                type: 'text',
-                text: ' text.',
-                format: 0
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "Formatting Examples",
+                type: "text",
+                version: 1
               }
             ],
-            direction: 'ltr',
-            format: '',
+            direction: "ltr",
+            format: "",
             indent: 0,
+            type: "heading",
+            version: 1,
+            tag: "h2"
+          },
+          {
+            children: [
+              {
+                detail: 0,
+                format: 1, // Bold
+                mode: "normal",
+                style: "",
+                text: "This text is bold. ",
+                type: "text",
+                version: 1
+              },
+              {
+                detail: 0,
+                format: 2, // Italic
+                mode: "normal",
+                style: "",
+                text: "This text is italic. ",
+                type: "text",
+                version: 1
+              },
+              {
+                detail: 0,
+                format: 8, // Strikethrough
+                mode: "normal",
+                style: "",
+                text: "This text has strikethrough.",
+                type: "text",
+                version: 1
+              }
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "paragraph",
             version: 1
           },
           {
-            type: 'heading',
-            tag: 'h2',
             children: [
               {
-                type: 'text',
-                text: 'Lists',
-                format: 0
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "List Examples",
+                type: "text",
+                version: 1
               }
             ],
-            direction: 'ltr',
-            format: '',
+            direction: "ltr",
+            format: "",
             indent: 0,
-            version: 1
+            type: "heading",
+            version: 1,
+            tag: "h2"
           },
           {
-            type: 'list',
-            listType: 'bullet',
             children: [
               {
-                type: 'listitem',
                 children: [
                   {
-                    type: 'text',
-                    text: 'Bullet point 1',
-                    format: 0
+                    detail: 0,
+                    format: 0,
+                    mode: "normal",
+                    style: "",
+                    text: "First item",
+                    type: "text",
+                    version: 1
                   }
-                ]
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                type: "listitem",
+                version: 1,
+                value: 1
               },
               {
-                type: 'listitem',
                 children: [
                   {
-                    type: 'text',
-                    text: 'Bullet point 2',
-                    format: 0
+                    detail: 0,
+                    format: 0,
+                    mode: "normal",
+                    style: "",
+                    text: "Second item",
+                    type: "text",
+                    version: 1
                   }
-                ]
-              }
-            ],
-            direction: 'ltr',
-            format: '',
-            indent: 0,
-            version: 1
-          },
-          {
-            type: 'list',
-            listType: 'number',
-            children: [
-              {
-                type: 'listitem',
-                children: [
-                  {
-                    type: 'text',
-                    text: 'Numbered item 1',
-                    format: 0
-                  }
-                ]
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                type: "listitem",
+                version: 1,
+                value: 2
               },
               {
-                type: 'listitem',
                 children: [
                   {
-                    type: 'text',
-                    text: 'Numbered item 2',
-                    format: 0
+                    detail: 0,
+                    format: 0,
+                    mode: "normal",
+                    style: "",
+                    text: "Third item",
+                    type: "text",
+                    version: 1
                   }
-                ]
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                type: "listitem",
+                version: 1,
+                value: 3
               }
             ],
-            direction: 'ltr',
-            format: '',
+            direction: "ltr",
+            format: "",
             indent: 0,
-            version: 1
+            type: "list",
+            version: 1,
+            listType: "number",
+            start: 1,
+            tag: "ol"
           }
         ],
-        direction: 'ltr',
-        format: '',
+        direction: "ltr",
+        format: "",
         indent: 0,
-        type: 'root',
+        type: "root",
         version: 1
       }
     };
 
     // DOM elements
     const jsonInput = document.getElementById('json-input');
-    const sampleBtn = document.getElementById('sample-btn');
+    const useExampleBtn = document.getElementById('use-example');
     
     const htmlOutput = document.getElementById('html-output');
     const htmlPreview = document.getElementById('html-preview');
-    const convertHtmlBtn = document.getElementById('convert-html-btn');
+    const convertHtmlBtn = document.getElementById('convert-html');
     
     const textOutput = document.getElementById('text-output');
-    const convertTextBtn = document.getElementById('convert-text-btn');
+    const convertTextBtn = document.getElementById('convert-text');
     
     const imageOutput = document.getElementById('image-output');
-    const imagePlaceholder = document.getElementById('image-placeholder');
-    const convertImageBtn = document.getElementById('convert-image-btn');
+    const convertImageBtn = document.getElementById('convert-image');
 
     const tabs = document.querySelectorAll('.tab');
     const tabContents = document.querySelectorAll('.tab-content');
@@ -504,24 +513,21 @@
       });
     });
 
-    // Load sample JSON
-    sampleBtn.addEventListener('click', () => {
-      jsonInput.value = JSON.stringify(sampleJson, null, 2);
+    // Use example JSON
+    useExampleBtn.addEventListener('click', () => {
+      jsonInput.value = JSON.stringify(exampleJson, null, 2);
     });
 
     // Convert to HTML
     convertHtmlBtn.addEventListener('click', async () => {
       try {
-        if (!jsonInput.value.trim()) {
-          alert('Please paste some Lexical JSON first.');
-          return;
-        }
-        
         const json = JSON.parse(jsonInput.value);
         
         const response = await fetch('/api/convert-to-html', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({ json })
         });
         
@@ -532,27 +538,22 @@
           htmlPreview.innerHTML = data.html;
         } else {
           htmlOutput.textContent = `Error: ${data.error}\n${data.details || ''}`;
-          htmlPreview.innerHTML = '<div style="color: red;">Error converting to HTML</div>';
         }
       } catch (error) {
         htmlOutput.textContent = `Error: ${error.message}`;
-        htmlPreview.innerHTML = '<div style="color: red;">Error parsing JSON</div>';
       }
     });
 
-    // Convert to plain text
+    // Convert to Plain Text
     convertTextBtn.addEventListener('click', async () => {
       try {
-        if (!jsonInput.value.trim()) {
-          alert('Please paste some Lexical JSON first.');
-          return;
-        }
-        
         const json = JSON.parse(jsonInput.value);
         
         const response = await fetch('/api/convert-to-text', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({ json })
         });
         
@@ -568,30 +569,20 @@
       }
     });
 
-    // Convert to image
+    // Convert to Image
     convertImageBtn.addEventListener('click', async () => {
       try {
-        if (!jsonInput.value.trim()) {
-          alert('Please paste some Lexical JSON first.');
-          return;
-        }
-        
         const json = JSON.parse(jsonInput.value);
         
-        // If you have an image conversion API endpoint
-        imageOutput.style.display = 'block';
-        imagePlaceholder.style.display = 'none';
+        // Create request parameters
+        const params = new URLSearchParams({
+          json: JSON.stringify(json)
+        });
         
-        imageOutput.src = `/api/convert-to-image?json=${encodeURIComponent(JSON.stringify(json))}`;
-        imageOutput.onerror = () => {
-          imageOutput.style.display = 'none';
-          imagePlaceholder.style.display = 'block';
-          imagePlaceholder.innerHTML = '<div style="color: red;">Error generating image</div>';
-        };
+        // Update the image src to trigger the request
+        imageOutput.src = `/api/convert-to-image?${params.toString()}`;
       } catch (error) {
-        imageOutput.style.display = 'none';
-        imagePlaceholder.style.display = 'block';
-        imagePlaceholder.innerHTML = `<div style="color: red;">Error: ${error.message}</div>`;
+        alert(`Error: ${error.message}`);
       }
     });
   </script>
