@@ -1,134 +1,449 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="..." />
-  <link rel="shortcut icon" href="./assets/favicon.ico" type="image/x-icon" />
-  <link rel="stylesheet" href="./styles/globals.css">
-  <title>File To URL</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lexical JSON Converter Demo</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f7f9fc;
+      color: #333;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .header {
+      margin-bottom: 30px;
+      text-align: center;
+    }
+    .row {
+      display: flex;
+      margin-bottom: 30px;
+    }
+    .col {
+      flex: 1;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      margin: 0 10px;
+    }
+    textarea {
+      width: 100%;
+      height: 300px;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: monospace;
+      margin-bottom: 10px;
+      font-size: 14px;
+    }
+    button {
+      background-color: #4a69bd;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.2s;
+    }
+    button:hover {
+      background-color: #3c58a8;
+    }
+    .output {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      min-height: 300px;
+      white-space: pre-wrap;
+      overflow: auto;
+      background-color: #f9f9f9;
+    }
+    .html-preview {
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      padding: 15px;
+      min-height: 300px;
+      overflow: auto;
+      background-color: white;
+    }
+    .thumbnail-container {
+      margin-top: 20px;
+      text-align: center;
+    }
+    .thumbnail {
+      max-width: 100%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+    .tabs {
+      display: flex;
+      margin-bottom: 15px;
+    }
+    .tab {
+      padding: 8px 15px;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+      cursor: pointer;
+      margin-right: 5px;
+      background-color: #f5f5f5;
+    }
+    .tab.active {
+      background-color: white;
+      font-weight: bold;
+    }
+    .tab-content {
+      display: none;
+    }
+    .tab-content.active {
+      display: block;
+    }
+  </style>
 </head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Lexical JSON Converter Demo</h1>
+      <p>Convert Lexical JSON to HTML, plain text, and images</p>
+    </div>
 
-<body class='wrapper'>
-  <p class="underline">Hello World</p>
-  <div class='box'>
-
-    <!-- Single File Upload Form -->
-    <form id="singleFileUploadForm" enctype="multipart/form-data">
-      <label class='text-xl' for="singleFile">Choose file:</label>
-      <input type="file" name="singleFile" id="singleFile" required />
-      <button type="button" onclick="uploadSingleFile()">Upload Single File</button>
-      <span class="loading" id="singleFileLoading">Uploading...</span>
-    </form>
-
-    <!-- Multiple File Upload Form -->
-    <form id="multipleFileUploadForm" enctype="multipart/form-data">
-      <label for="multipleFiles">Choose files:</label>
-      <input type="file" name="multipleFiles" id="multipleFiles" multiple required />
-      <button type="button" onclick="uploadMultipleFiles()">Upload Multiple Files</button>
-      <span class="loading" id="multipleFilesLoading">Uploading...</span>
-    </form>
-
-    <!-- Text to Speech Form -->
-    <form id="ttsForm">
-      <label for="textToSpeech">Text to Speech:</label>
-      <input type="text" name="textToSpeech" id="textToSpeech" required />
-      <button type="button" onclick="convertToSpeech()">Convert to Speech</button>
-      <span class="loading" id="ttsLoading">Converting...</span>
-    </form>
-
-    <div id="result"></div>
-
+    <div class="row">
+      <div class="col">
+        <h2>Lexical JSON Input</h2>
+        <textarea id="json-input" placeholder="Paste your Lexical JSON here..."></textarea>
+        <p>
+          <button id="use-example">Use Example JSON</button>
+        </p>
+      </div>
+      <div class="col">
+        <div class="tabs">
+          <div class="tab active" data-tab="html">HTML Output</div>
+          <div class="tab" data-tab="text">Text Output</div>
+          <div class="tab" data-tab="image">Image Output</div>
+        </div>
+        
+        <div class="tab-content active" id="html-tab">
+          <button id="convert-html">Convert to HTML</button>
+          <pre class="output" id="html-output"></pre>
+          <h3>HTML Preview</h3>
+          <div class="html-preview" id="html-preview"></div>
+        </div>
+        
+        <div class="tab-content" id="text-tab">
+          <button id="convert-text">Convert to Plain Text</button>
+          <pre class="output" id="text-output"></pre>
+        </div>
+        
+        <div class="tab-content" id="image-tab">
+          <button id="convert-image">Generate Image</button>
+          <div class="thumbnail-container">
+            <img id="image-output" class="thumbnail" alt="Document preview will appear here">
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
-
-
-    async function uploadSingleFile() {
-      const fileInput = document.getElementById('singleFile');
-      const file = fileInput.files[0];
-      const loadingSpan = document.getElementById('singleFileLoading');
-
-      if (file) {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        try {
-          loadingSpan.style.display = 'inline'; // Show loading indicator
-
-          const response = await fetch('/api/v1/file', {
-            method: 'POST',
-            body: formData,
-          });
-
-          const data = await response.json();
-          document.getElementById('result').innerHTML = `Single file uploaded. URL: ${data.url}`;
-        } catch (error) {
-          console.error('Error uploading single file:', error);
-        } finally {
-          loadingSpan.style.display = 'none'; // Hide loading indicator
-        }
+    // Example Lexical JSON
+    const exampleJson = {
+      root: {
+        children: [
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "Lexical JSON Example Document",
+                type: "text",
+                version: 1
+              }
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "heading",
+            version: 1,
+            tag: "h1"
+          },
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "This is a sample document created with Lexical Editor. Below are some examples of formatting:",
+                type: "text",
+                version: 1
+              }
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "paragraph",
+            version: 1
+          },
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "Formatting Examples",
+                type: "text",
+                version: 1
+              }
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "heading",
+            version: 1,
+            tag: "h2"
+          },
+          {
+            children: [
+              {
+                detail: 0,
+                format: 1, // Bold
+                mode: "normal",
+                style: "",
+                text: "This text is bold. ",
+                type: "text",
+                version: 1
+              },
+              {
+                detail: 0,
+                format: 2, // Italic
+                mode: "normal",
+                style: "",
+                text: "This text is italic. ",
+                type: "text",
+                version: 1
+              },
+              {
+                detail: 0,
+                format: 8, // Strikethrough
+                mode: "normal",
+                style: "",
+                text: "This text has strikethrough.",
+                type: "text",
+                version: 1
+              }
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "paragraph",
+            version: 1
+          },
+          {
+            children: [
+              {
+                detail: 0,
+                format: 0,
+                mode: "normal",
+                style: "",
+                text: "List Examples",
+                type: "text",
+                version: 1
+              }
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "heading",
+            version: 1,
+            tag: "h2"
+          },
+          {
+            children: [
+              {
+                children: [
+                  {
+                    detail: 0,
+                    format: 0,
+                    mode: "normal",
+                    style: "",
+                    text: "First item",
+                    type: "text",
+                    version: 1
+                  }
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                type: "listitem",
+                version: 1,
+                value: 1
+              },
+              {
+                children: [
+                  {
+                    detail: 0,
+                    format: 0,
+                    mode: "normal",
+                    style: "",
+                    text: "Second item",
+                    type: "text",
+                    version: 1
+                  }
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                type: "listitem",
+                version: 1,
+                value: 2
+              },
+              {
+                children: [
+                  {
+                    detail: 0,
+                    format: 0,
+                    mode: "normal",
+                    style: "",
+                    text: "Third item",
+                    type: "text",
+                    version: 1
+                  }
+                ],
+                direction: "ltr",
+                format: "",
+                indent: 0,
+                type: "listitem",
+                version: 1,
+                value: 3
+              }
+            ],
+            direction: "ltr",
+            format: "",
+            indent: 0,
+            type: "list",
+            version: 1,
+            listType: "number",
+            start: 1,
+            tag: "ol"
+          }
+        ],
+        direction: "ltr",
+        format: "",
+        indent: 0,
+        type: "root",
+        version: 1
       }
-    }
+    };
 
-    async function uploadMultipleFiles() {
-      const fileInput = document.getElementById('multipleFiles');
-      const files = fileInput.files;
-      const loadingSpan = document.getElementById('multipleFilesLoading');
+    // DOM elements
+    const jsonInput = document.getElementById('json-input');
+    const useExampleBtn = document.getElementById('use-example');
+    
+    const htmlOutput = document.getElementById('html-output');
+    const htmlPreview = document.getElementById('html-preview');
+    const convertHtmlBtn = document.getElementById('convert-html');
+    
+    const textOutput = document.getElementById('text-output');
+    const convertTextBtn = document.getElementById('convert-text');
+    
+    const imageOutput = document.getElementById('image-output');
+    const convertImageBtn = document.getElementById('convert-image');
 
-      if (files.length > 0) {
-        const formData = new FormData();
-        for (const file of files) {
-          formData.append('files', file);
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
+    
+    // Tab switching
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tabContents.forEach(tc => tc.classList.remove('active'));
+        
+        tab.classList.add('active');
+        document.getElementById(`${tab.dataset.tab}-tab`).classList.add('active');
+      });
+    });
+
+    // Use example JSON
+    useExampleBtn.addEventListener('click', () => {
+      jsonInput.value = JSON.stringify(exampleJson, null, 2);
+    });
+
+    // Convert to HTML
+    convertHtmlBtn.addEventListener('click', async () => {
+      try {
+        const json = JSON.parse(jsonInput.value);
+        
+        const response = await fetch('/api/convert-to-html', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ json })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          htmlOutput.textContent = data.html;
+          htmlPreview.innerHTML = data.html;
+        } else {
+          htmlOutput.textContent = `Error: ${data.error}\n${data.details || ''}`;
         }
-
-        try {
-          loadingSpan.style.display = 'inline'; // Show loading indicator
-
-
-          const response = await fetch('/api/v1/files', {
-            method: 'POST',
-            body: formData,
-          });
-
-          const data = await response.json();
-          document.getElementById('result').innerHTML = `Multiple files uploaded. URLs: ${data.url.join(', ')}`;
-        } catch (error) {
-          console.error('Error uploading multiple files:', error);
-        } finally {
-          loadingSpan.style.display = 'none'; // Hide loading indicator
-        }
+      } catch (error) {
+        htmlOutput.textContent = `Error: ${error.message}`;
       }
-    }
+    });
 
-    async function convertToSpeech() {
-      const textInput = document.getElementById('textToSpeech');
-      const text = textInput.value;
-      const loadingSpan = document.getElementById('ttsLoading');
-
-      if (text) {
-        try {
-          loadingSpan.style.display = 'inline'; // Show loading indicator
-
-          const response = await fetch('/api/v1/tts', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ plainText: text }),
-          });
-
-          const data = await response.json();
-          document.getElementById('result').innerHTML = `Text-to-Speech generated. URL: ${data.url}`;
-        } catch (error) {
-          console.error('Error converting to speech:', error);
-        } finally {
-          loadingSpan.style.display = 'none'; // Hide loading indicator
+    // Convert to Plain Text
+    convertTextBtn.addEventListener('click', async () => {
+      try {
+        const json = JSON.parse(jsonInput.value);
+        
+        const response = await fetch('/api/convert-to-text', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ json })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok) {
+          textOutput.textContent = data.text;
+        } else {
+          textOutput.textContent = `Error: ${data.error}\n${data.details || ''}`;
         }
+      } catch (error) {
+        textOutput.textContent = `Error: ${error.message}`;
       }
-    }
+    });
+
+    // Convert to Image
+    convertImageBtn.addEventListener('click', async () => {
+      try {
+        const json = JSON.parse(jsonInput.value);
+        
+        // Create request parameters
+        const params = new URLSearchParams({
+          json: JSON.stringify(json)
+        });
+        
+        // Update the image src to trigger the request
+        imageOutput.src = `/api/convert-to-image?${params.toString()}`;
+      } catch (error) {
+        alert(`Error: ${error.message}`);
+      }
+    });
   </script>
 </body>
-
 </html>

@@ -1,226 +1,222 @@
-# Express.js Vercel Starter
+# Lexical JSON Converter API
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue.svg?cacheSeconds=2592000)](https://github.com/Clogarr/expressjs-vercel-starter)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+A serverless API built for Vercel that converts Lexical JSON to HTML, plain text, and images. Perfect for adding Google Docs/Drive-like experiences to your application.
 
-## Welcome to Express.js Vercel Starter 👋
+## API Endpoints
 
-Express.js Vercel Starter is a minimalistic and versatile boilerplate for web development, combining the powerful Express.js framework with the deployment capabilities of Vercel.
-
-🏠 [Homepage](https://expressjsvercelstarter.vercel.app)
-✨ [Demo](https://expressjsvercelstarter.vercel.app)
-
-## Project Overview
-
-### Description
-
-Express.js Vercel Starter is designed to streamline the development and deployment of web applications using Express.js and Vercel. It provides a solid foundation for building scalable and maintainable projects.
-
-### Folder Structure
-
-```sh
-.
-├── api
-│   └── index.ts
-├── LICENSE
-├── package.json
-├── package-lock.json
-├── public
-│   ├── favicon.ico
-│   ├── index.html
-│   └── style.css
-├── src
-│   ├── controllers
-│   │   ├── files.ts
-│   │   ├── file.ts
-│   │   └── tts.ts
-│   ├── lib
-│   │   └── config
-│   │       ├── env.ts
-│   │       ├── multer.ts
-│   │       └── sanity.ts
-│   ├── routes
-│   │   ├── files.ts
-│   │   ├── file.ts
-│   │   └── tts.ts
-│   └── server.ts
-├── tsconfig.json
-└── vercel.json
+### 1. Convert to HTML
 
 ```
-
-## Environment Variables
-
-The following environment variables are utilized:
-
-```sh
-AWS_ACCESS_KEY_ID=''
-AWS_SECRET_ACCESS_KEY=''
-AWS_REGION=''
-
-SANITY_SECRET_TOKEN=''
-SANITY_API_VERSION=''
-SANITY_PROJECT_ID=''
-SANITY_DATASET=''
+POST /api/convert-to-html
 ```
 
+Converts Lexical JSON to HTML.
 
-## API Endpoint Overview
+#### Request Body
 
-The project provides the following API endpoints, each serving a specific purpose:
-
-### Files Endpoint: `/api/v1/files`
-
-This endpoint handles operations related to files. Users can interact with the API to upload multiples files and get URL from the files uploaded.
-
-### File Endpoint: `/api/v1/file`
-
-The file endpoint is responsible for single file uploads. It allows users to one file and get URL of the file uploaded.
-
-### Text-to-Speech (TTS) Endpoint: `/api/v1/tts`
-
-The TTS endpoint provides functionality for converting text to speech. Users can send text data to this endpoint, and the server will respond with an audio file generated from the provided text.
-
-These API endpoints collectively form the core functionality of the Express.js Vercel Starter, offering a flexible and scalable solution for file and text processing.
-
-
-## Packages Used
-
-The project utilizes the following packages:
-
-### Development Dependencies
-
-- **@types/cors:**
-  - Provides TypeScript type definitions for the `cors` package, enabling type checking and editor support.
-
-- **@types/express:**
-  - Offers TypeScript type definitions for the Express.js framework, enhancing code quality and development experience.
-
-- **@types/helmet:**
-  - Provides TypeScript type definitions for the `helmet` package, ensuring type safety and code completion.
-
-- **@types/morgan:**
-  - Offers TypeScript type definitions for the `morgan` package, enhancing the developer experience with type-aware code.
-
-- **@types/multer:**
-  - Provides TypeScript type definitions for the `multer` package, enabling type-safe interactions with the file upload middleware.
-
-- **@types/node:**
-  - Supplies TypeScript type definitions for Node.js core modules, facilitating type-checking for Node.js-specific functionality.
-
-- **@typescript-eslint/eslint-plugin:**
-  - Integrates ESLint with TypeScript, enabling linting for TypeScript code and enforcing coding standards.
-
-- **autoprefixer:**
-  - A PostCSS plugin that automatically adds vendor prefixes to CSS properties, ensuring cross-browser compatibility.
-
-- **eslint:**
-  - A pluggable linting utility for JavaScript and TypeScript, enforcing code style and identifying potential issues.
-
-- **eslint-config-standard-with-typescript:**
-  - An ESLint configuration that combines the StandardJS style guide with TypeScript support, maintaining code consistency.
-
-- **eslint-plugin-import:**
-  - ESLint plugin that provides linting rules for ES6 import statements, ensuring correct usage and preventing common mistakes.
-
-- **eslint-plugin-n:**
-  - An ESLint plugin that enforces version-specific Node.js rules, improving compatibility and preventing usage of unsupported features.
-
-- **eslint-plugin-promise:**
-  - ESLint plugin that adds linting rules related to JavaScript Promises, promoting best practices and preventing common errors.
-
-- **nodemon:**
-  - Monitors files for changes and automatically restarts the Node.js application during development, improving the development workflow.
-
-- **typescript:** 
-  - The TypeScript programming language compiler, enabling the use of TypeScript in the project for static typing and improved code quality.
-
-### Dependencies
-
-- **aws-sdk:**
-  - The AWS SDK for JavaScript, enabling interaction with various Amazon Web Services (AWS) from the Node.js environment.
-
-- **cors:** 
-  - Middleware for handling Cross-Origin Resource Sharing (CORS) in Express.js applications, allowing controlled access to resources from different origins.
-
-- **dotenv:**
-  - A zero-dependency module that loads environment variables from a `.env` file into `process.env`, simplifying configuration management.
-
-- **express:**
-  - Fast, unopinionated, minimalist web framework for Node.js, providing a robust foundation for building web applications and APIs.
-
-- **helmet:**
-  - A collection of middleware functions to secure Express.js applications by setting various HTTP headers, enhancing security.
-
-- **morgan:**
-  - HTTP request logger middleware for Node.js, providing detailed logging information during development and debugging.
-
-- **multer:**
-  - A middleware for handling `multipart/form-data`, primarily used for file uploads in Express.js applications.
-
-- **next-sanity:** 
-  - A Next.js utility for integrating with the Sanity CMS, simplifying the process of fetching data from Sanity in Next.js applications.
-
-
-
-## Configuration
-
-No configuration is needed from the user; everything has been set up automatically. Users can modify the entire codebase and add more files to the public directory. Leave the `api` directory as is.
-
-## Getting Started
-
-### Installation
-
-```sh
-npm install
+```json
+{
+  "json": {
+    "root": {
+      "direction": "ltr",
+      "format": "",
+      "indent": 0,
+      "type": "root",
+      "version": 1,
+      "children": [...]
+    }
+  },
+  "config": {
+    "h1": {
+      "style": {
+        "fontSize": "20px",
+        "fontWeight": "bold"
+      },
+      "class": "heading-large"
+    },
+    "h2": {
+      "style": {
+        "fontSize": "18px"
+      }
+    }
+  }
+}
 ```
-### Usage
-Clone the Repository
 
-```sh
-git clone https://github.com/Clogarr/expressjs-vercel-starter
+- `json`: The Lexical JSON content (required)
+- `config`: Optional styling configuration for HTML elements
+
+#### Response
+
+```json
+{
+  "html": "<h1 class=\"heading-large\" style=\"font-size: 20px; font-weight: bold;\">Title</h1><p>Content...</p>"
+}
 ```
-### Develop
 
-Create a `.env` file from `.env.example`, then run the following command:
+### 2. Convert to Image
 
-```sh
-npm run dev
 ```
+POST /api/convert-to-image
+```
+
+Converts Lexical JSON to an image (PNG or JPEG).
+
+#### Request Body
+
+```json
+{
+  "json": {
+    "root": {
+      "direction": "ltr",
+      "format": "",
+      "indent": 0,
+      "type": "root",
+      "version": 1,
+      "children": [...]
+    }
+  },
+  "config": {
+    "h1": {
+      "style": {
+        "fontSize": "24px",
+        "color": "#333"
+      }
+    }
+  },
+  "options": {
+    "width": 800,
+    "height": 600,
+    "format": "png",
+    "quality": 90,
+    "scale": 2,
+    "customCss": "body { background-color: #f9f9f9; }"
+  }
+}
+```
+
+- `json`: The Lexical JSON content (required)
+- `config`: Optional styling configuration
+- `options`: Image generation options
+  - `width`: Image width in pixels (default: 800)
+  - `height`: Initial image height in pixels (auto-adjusts to content)
+  - `format`: "png" or "jpeg" (default: "png")
+  - `quality`: JPEG quality (1-100, default: 90)
+  - `scale`: Device scale factor for better resolution (default: 2)
+  - `customCss`: Additional CSS styles
+
+#### Response
+
+The API returns the image directly with appropriate content type headers.
+
+### 3. Convert to Plain Text
+
+```
+POST /api/convert-to-text
+```
+
+Converts Lexical JSON to plain text.
+
+#### Request Body
+
+```json
+{
+  "json": {
+    "root": {
+      "direction": "ltr",
+      "format": "",
+      "indent": 0,
+      "type": "root",
+      "version": 1,
+      "children": [...]
+    }
+  },
+  "options": {
+    "chordsTonality": -2
+  }
+}
+```
+
+- `json`: The Lexical JSON content (required)
+- `options`: Optional conversion options (e.g., for chord transposition)
+
+#### Response
+
+```json
+{
+  "text": "Title\n\nContent paragraph..."
+}
+```
+
+## Usage with Google Docs/Drive-like Experience
+
+To implement a Google Docs/Drive-like experience:
+
+1. Use the `/api/convert-to-html` endpoint to render the document content in your app
+2. Use the `/api/convert-to-image` endpoint to:
+   - Generate thumbnails for documents in a file browser view
+   - Create preview images for social sharing
+   - Provide document snapshots for users without editing permissions
+
 ## Deployment
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FClogarr%2Fexpressjs-vercel-starter)
 
-#### Prerequisites
+### Prerequisites
 
-- Install [Vercel CLI](https://vercel.com/download)
+- Node.js 16+
+- Vercel account
 
-#### Steps
+### Local Development
 
-1. Click on the "Deploy with Vercel" button on your project's repository page.
-2. If prompted, log in to your Vercel account or create a new account.
-3. Select the repository that you want to deploy.
-4. Click on "Deploy." Vercel will automatically build and deploy your project.
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-Your project should now be live and accessible at the URL provided by Vercel.
+### Deployment to Vercel
 
-## Built with
+1. Build the project:
+   ```bash
+   npm run build
+   ```
 
-- [Express.js](https://expressjs.com/en/5x/api.html) - Fast, unopinionated, minimalist web framework for Node.js.
-- [Vercel](https://vercel.com/docs) - The platform for serverless deployment and serverless functions.
+2. Deploy to Vercel:
+   ```bash
+   vercel
+   ```
 
-## Useful Links
+## Example Usage (Frontend)
 
-- [Using Express.js with Vercel – Vercel Docs](https://vercel.com/guides/using-express-with-vercel)
-- [Vercel Documentation](https://vercel.com/docs)
-- [Vercel Limits](https://vercel.com/docs/limits/overview)
+```javascript
+// Convert Lexical JSON to HTML
+async function getHtml(lexicalJson) {
+  const response = await fetch('https://your-api.vercel.app/api/convert-to-html', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ json: lexicalJson })
+  });
+  
+  const data = await response.json();
+  return data.html;
+}
 
-## Author
+// Generate document image (e.g., for thumbnails)
+function getThumbnailUrl(lexicalJson, width = 200) {
+  const apiUrl = 'https://your-api.vercel.app/api/convert-to-image';
+  const params = new URLSearchParams({
+    width: width,
+    format: 'jpeg',
+    quality: 80
+  });
+  
+  // For direct image usage in <img> tags
+  return `${apiUrl}?${params.toString()}`;
+}
 
-👤 **Clogarr**
-👤 **Rocky Essel**
-
-- GitHub: [@Clogarr](https://github.com/Clogarr)
-- GitHub: [@rockyessel](https://github.com/rockyessel)
-
-## Show your support
-Give a ⭐️ if this project helped you!
+// Display document in <img> tag (thumbnail view)
+document.getElementById('thumbnail').src = getThumbnailUrl(lexicalJson);
+```
